@@ -1,5 +1,8 @@
 import Header from "./components/Header";
+import Error from "./components/Error";
+import Loader from "./components/Loader";
 import Main from "./components/Main";
+import StartScreen from "./components/StartScreen";
 import { useEffect, useReducer } from "react";
 
 const initialState = {
@@ -23,7 +26,10 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+
+  const numQuestions = questions.length;
+
   useEffect(function () {
     fetch(
       "https://deji01-shiny-trout-4r56j5q4w76c574-8001.app.github.dev/questions"
@@ -37,8 +43,9 @@ function App() {
     <div className="app">
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question?</p>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
       </Main>
     </div>
   );
