@@ -4,6 +4,7 @@ import Button from "../../ui/Button";
 import { formatCurrency } from "../../utils/helpers";
 import { addItem, getCurrentQuantityById } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
+import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 
 function MenuItem({ pizza }) {
   const dispatch = useDispatch();
@@ -28,7 +29,15 @@ function MenuItem({ pizza }) {
         <div>
           {!soldOut ? <p>{formatCurrency(unitPrice)}</p> : <p>Sold out</p>}
 
-          {isInCart && <DeleteItem pizzaId={id} />}
+          {isInCart && (
+            <div>
+              <UpdateItemQuantity
+                pizzaId={id}
+                currentQuantity={currentQuantity}
+              />
+              <DeleteItem pizzaId={id} />
+            </div>
+          )}
 
           {!soldOut && !isInCart && (
             <Button onClick={handleAddToCart}>Add to cart</Button>
